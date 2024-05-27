@@ -50,7 +50,7 @@ class MLPlay:
                     self.x.append(scene_info["ball"][0])
                     self.y.append(scene_info["ball"][1])
                 elif len(self.x) == 2:
-                    self.Log_1P.append([scene_info["ball"][0], scene_info["ball"][1], scene_info["blocker"][0], scene_info["blocker"][1], scene_info["platform_1P"][0], scene_info["platform_1P"][1]])
+                    self.Log_1P.append([scene_info["ball"][0], scene_info["ball"][1], scene_info["blocker"][0], scene_info["blocker"][1], scene_info["platform_1P"][0]])
                     command = "MOVE_RIGHT"
                     self.x = self.x[1:]  # 刪除第一個元素
                     self.y = self.y[1:]  # 刪除第一個元素
