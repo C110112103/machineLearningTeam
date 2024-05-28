@@ -21,9 +21,11 @@ class MLPlay:
                     pickle.dump(self.ball_position, f)
                 with open(os.path.join(os.path.dirname(__file__), 'target.pickle'), 'wb') as f:
                     pickle.dump(self.action, f)
+                self.Log_1P = [] 
                 return "RESET"
             if not self.ball_served:
                 self.ball_served = True
+                self.Log_1P = [] 
                 return "SERVE_TO_LEFT"
             else:
                 if len(self.y) < 2:
