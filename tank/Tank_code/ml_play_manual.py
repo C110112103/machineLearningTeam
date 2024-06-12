@@ -18,7 +18,6 @@ class MLPlay:
         
         if self.side == "1P":
             P1 = scene_info['teammate_info'][0]
-
             data = scene_info['oil_stations_info']
 
             max_x = data[0]
@@ -26,7 +25,30 @@ class MLPlay:
                 if item['x'] > max_x['x']:
                     max_x = item  
 
-            P2 = max_x
+            P2 = max_x  
+
+            if P1['oil'] < 30:
+                data = scene_info['oil_stations_info']
+
+                max_x = data[0]
+                for item in data:
+                    if item['x'] > max_x['x']:
+                        max_x = item  
+
+                P2 = max_x  
+                print(1)
+
+            elif P1['power'] == 5:
+                data = scene_info['bullet_stations_info']
+
+                max_x = data[0]
+                for item in data:
+                    if item['x'] > max_x['x']:
+                        max_x = item  
+
+                P2 = max_x      
+
+
             command = []
             if scene_info['power'] > 0:
                 if abs(P1['x'] - P2['x']) > 5 or abs(P1['y'] - P2['y']) > 5:
@@ -70,6 +92,8 @@ class MLPlay:
                     command.append("FORWARD")  
                 # if len(command) == 2:
                 #     del command[1]                        
+            if P1['power'] > 5:
+                command.append("SHOOT")
             return command
 
         elif self.side == "2P":
