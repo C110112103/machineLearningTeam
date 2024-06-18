@@ -20,7 +20,7 @@ class MLPlay:
         if scene_info["status"] != "GAME_ALIVE":
             print("exnd")
             if len(self.P1_log) != 0:
-                log_folder = r"C:\Users\gslab\AppData\Local\paia_desktop\app-2.6.0\resources\app.asar.unpacked\games\TankMan\LOG"
+                log_folder = r"C:\Users\gslab\AppData\Local\paia_desktop\app-2.6.0\resources\app.asar.unpacked\games\TankMan\LOG_P1"
                 if not os.path.exists(log_folder):
                     os.makedirs(log_folder)
                     
@@ -37,6 +37,25 @@ class MLPlay:
                 with open(log_file_path, "w", encoding='utf-8') as log_file:
                     json.dump(log_data, log_file, ensure_ascii=False, indent=4)
                 self.P1_log = []
+                
+            if len(self.P2_log) != 0:
+                log_folder = r"C:\Users\gslab\AppData\Local\paia_desktop\app-2.6.0\resources\app.asar.unpacked\games\TankMan\LOG_P2"
+                if not os.path.exists(log_folder):
+                    os.makedirs(log_folder)
+                    
+                log_file_path = os.path.join(log_folder, f"{time.time()}.json")
+
+                try:
+                    with open(log_file_path, "r", encoding='utf-8') as log_file:
+                        log_data = json.load(log_file)
+                except FileNotFoundError:
+                    log_data = []
+
+                log_data = self.P2_log
+
+                with open(log_file_path, "w", encoding='utf-8') as log_file:
+                    json.dump(log_data, log_file, ensure_ascii=False, indent=4)
+                self.P2_log = []
             return "RESET"
         
         if self.side == "1P":
@@ -123,8 +142,7 @@ class MLPlay:
                 
             action = np.array(command)
             action = action[-1]
-            # print([[P1['x'], P1['y']], action, [P2['x'], P2['y']], P1['power']])
-            self.P1_log.append([[P1['x'], P1['y']], action, [P2['x'], P2['y']], P1['power']])
+            self.P1_log.append([[P1['x'], P1['y']], [P2['x'], P2['y']], P1['power'], action])
             return command
 
         elif self.side == "2P":
@@ -203,6 +221,11 @@ class MLPlay:
                 #     del command[1]                        
             if P2['power'] > 5:
                 command.append("SHOOT")
+                
+            action = np.array(command)
+            action = action[-1]
+            self.P2_log.append([[P2['x'], P2['y']], [P1['x'], P1['y']], P2['power'], action])
+            
             return command
 
     def reset(self):
